@@ -26,3 +26,8 @@ export const fetchDecks = async (): Promise<string[]> => {
 export const fetchModels = async (): Promise<string[]> => {
     return ankiConnect({ action: "modelNames" });
 }
+
+export const fetchModelFieldNames = async (modelName: string): Promise<string[]> => {
+    return ankiConnect({ action: "modelFieldNames", 
+                       params: { modelName } });
+}
