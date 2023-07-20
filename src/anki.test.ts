@@ -26,6 +26,7 @@ it('fetches model names correctly', async () => {
     const modelNames = await fetchModels()
     expect(modelNames).toEqual(['model1', 'model2', 'model3'])
 })
+
 it('properly handles network errors when fetching deck names', async () => {
     server.use(
         rest.post('http://localhost:8765', (_, res, ctx) => {
@@ -34,6 +35,7 @@ it('properly handles network errors when fetching deck names', async () => {
     )
     await expect(fetchDecks()).rejects.toThrow('Network response was not ok')
 })
+
 it('properly handles network errors when fetching model names', async () => {
     server.use(
         rest.post('http://localhost:8765', (_, res, ctx) => {
@@ -42,6 +44,7 @@ it('properly handles network errors when fetching model names', async () => {
     )
     await expect(fetchModels()).rejects.toThrow('Network response was not ok')
 })
+
 it('throws an error when the server returns an error message for deck names', async () => {
     server.use(
         rest.post('http://localhost:8765', (_, res, ctx) => {
@@ -50,6 +53,7 @@ it('throws an error when the server returns an error message for deck names', as
     )
     await expect(fetchDecks()).rejects.toThrow('Server error')
 })
+
 it('throws an error when the server returns an error message for model names', async () => {
     server.use(
         rest.post('http://localhost:8765', (_, res, ctx) => {
