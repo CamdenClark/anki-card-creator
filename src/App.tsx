@@ -14,21 +14,19 @@ function Home() {
     const [state, setState] = useState("")
 
     return (
-        <>
-            <div>
-                <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Deck</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={state}
-                        onChange={e => { e.target.value && setState(e.target.value) }}
-                    >
-                        {decks && decks.map(deck => <MenuItem key={"deck" + deck} value={deck}>{deck}</MenuItem>)}
-                    </Select>
-                </FormControl>
-            </div>
-        </>
+        <div>
+            <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Deck</InputLabel>
+                <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={state}
+                    onChange={e => { e.target.value && setState(e.target.value) }}
+                >
+                    {decks && decks.map(deck => <MenuItem key={"deck" + deck} value={deck}>{deck}</MenuItem>)}
+                </Select>
+            </FormControl>
+        </div>
     );
 }
 
