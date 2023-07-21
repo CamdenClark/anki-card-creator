@@ -22,10 +22,9 @@ function Home() {
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         value={state}
-                        label="Deck"
                         onChange={e => { e.target.value && setState(e.target.value) }}
                     >
-                        {decks && decks.map(deck => <MenuItem value={deck}>{deck}</MenuItem>)}
+                        {decks && decks.map(deck => <MenuItem key={"deck" + deck} value={deck}>{deck}</MenuItem>)}
                     </Select>
                 </FormControl>
             </div>
