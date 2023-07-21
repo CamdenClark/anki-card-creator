@@ -42,6 +42,23 @@ it('renders select dropdown with deck names', async () => {
   })
 });
 
+it('renders select dropdown with model names', async () => {
+  const queryClient = new QueryClient();
+  render(
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  );
+  expect(screen.getByText(/Note type/i));
+  const select = screen.getByLabelText(/Note type/i)
+  fireEvent.mouseDown(select) // Open the dropdown menu  
+  await waitFor(() => {
+    expect(screen.getByText(/model1/i))
+    expect(screen.getByText(/model2/i))
+    expect(screen.getByText(/model3/i))
+  })
+});
+
 it('selects a deck', async () => {
   const queryClient = new QueryClient();
   render(
@@ -57,5 +74,32 @@ it('selects a deck', async () => {
   fireEvent.click(menuItem) // Select the MenuItem  
   await waitFor(() => {
     expect(screen.getByLabelText(/Deck/i).textContent).toBe('deck2')
+  })
+});
+
+it('selects a deck', async () => {
+  const queryClient = new QueryClient();
+  render(
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  );
+  expect(screen.getByText(/Deck/i));
+  const select = screen.getByLabelText(/Deck/i)
+  fireEvent.mouseDown(select) // Open the dropdown menu  
+  const menuItem = await screen.findByText(/deck2/i) 
+  // Find the specific MenuItem by text
+  fireEvent.click(menuItem) // Select the MenuItem  
+  await waitFor(() => {
+    expect(screen.getByLabelText(/Deck/i).textContent).toBe('deck2')
+  })
+  expect(screen.getByText(/Note type/i));
+  const noteTypeSelect = screen.getByLabelText(/Note type/i)
+  fireEvent.mouseDown(noteTypeSelect) // Open the dropdown menu  
+  const noteType = await screen.findByText(/model2/i) 
+  // Find the specific MenuItem by text
+  fireEvent.click(noteType) // Select the MenuItem  
+  await waitFor(() => {
+    expect(screen.getByLabelText(/Note type/i).textContent).toBe('model2')
   })
 });
