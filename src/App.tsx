@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 import { useState } from 'react';
@@ -18,6 +18,14 @@ function Home() {
 
     const [deck, setDeck] = useState("")
     const [model, setModel] = useState("")
+    const [prompt, setPrompt] = useState("")
+
+    // Function to log selected deck, model and prompt
+    const logSelections = () => {
+        console.log('Deck:', deck,
+            'Model:', model,
+            'Prompt:', prompt);
+    }
 
     return (
         <div>
@@ -43,6 +51,20 @@ function Home() {
                     {models && models.map(model => <MenuItem key={"model" + model} value={model}>{model}</MenuItem>)}
                 </Select>
             </FormControl>
+            <FormControl fullWidth>
+                <TextField
+                    id="prompt"
+                    label="Prompt"
+                    value={prompt}
+                    onChange={e => setPrompt(e.target.value)}
+                />
+            </FormControl>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={logSelections}>
+                Log Selected Values
+            </Button>
         </div>
     );
 }

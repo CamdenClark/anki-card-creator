@@ -75,24 +75,6 @@ it('selects a deck', async () => {
   await waitFor(() => {
     expect(screen.getByLabelText(/Deck/i).textContent).toBe('deck2')
   })
-});
-
-it('selects a deck', async () => {
-  const queryClient = new QueryClient();
-  render(
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
-  );
-  expect(screen.getByText(/Deck/i));
-  const select = screen.getByLabelText(/Deck/i)
-  fireEvent.mouseDown(select) // Open the dropdown menu  
-  const menuItem = await screen.findByText(/deck2/i) 
-  // Find the specific MenuItem by text
-  fireEvent.click(menuItem) // Select the MenuItem  
-  await waitFor(() => {
-    expect(screen.getByLabelText(/Deck/i).textContent).toBe('deck2')
-  })
   expect(screen.getByText(/Note type/i));
   const noteTypeSelect = screen.getByLabelText(/Note type/i)
   fireEvent.mouseDown(noteTypeSelect) // Open the dropdown menu  
@@ -102,4 +84,12 @@ it('selects a deck', async () => {
   await waitFor(() => {
     expect(screen.getByLabelText(/Note type/i).textContent).toBe('model2')
   })
+  expect(screen.getByLabelText(/Prompt/i));
+  const input = screen.getByLabelText(/Prompt/i)
+  fireEvent.change(input, { target: { value: 'Test Prompt' } }) // Change the input
+
+  const button = screen.getByText(/Log Selected Values/i);
+  fireEvent.click(button);
+  expect(button).toBeVisible();
+
 });
