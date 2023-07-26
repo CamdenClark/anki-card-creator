@@ -4,10 +4,19 @@ export async function suggestAnkiNotes(
     const function_parameters: object = {
         type: "object",
         properties: {
-            Front: { type: "string" },
-            Back: { type: "string" }
-        },
-        required: ["Front", "Back"]
+            notes: {
+                type: "array",
+                minItems: 3,
+                items: {
+                    type: "object",
+                    properties: {
+                        Front: { type: "string" },
+                        Back: { type: "string" }
+                    },
+                    required: ["Front", "Back"]
+                }
+            },
+        }
     }
     const body = {
         model: 'gpt-3.5-turbo',
@@ -47,11 +56,11 @@ export async function suggestAnkiNotes(
         throw new Error('No completion choices were returned from OpenAI');
     }
 
-    return data.choices.map(choice =>
+    const notes = JSON.parse(data.choices[0].message.function_call.arguments).notes
+    return notes.map(fields =>
     ({
         deckName,
         modelName,
-        fields: JSON.parse(choice.message.function_call.arguments)
+        fields
     }))
-
 }
