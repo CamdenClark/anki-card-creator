@@ -27,6 +27,12 @@ export const fetchModels = async (): Promise<string[]> => {
     return ankiConnect({ action: "modelNames" });
 }
 
+export const addNote = async (note: any): Promise<string[]> => {
+    return ankiConnect({
+        action: "addNote",
+        params: { note }
+    });
+}
 export const fetchModelFieldNames = async (modelName: string): Promise<string[]> => {
     return ankiConnect({
         action: "modelFieldNames",
