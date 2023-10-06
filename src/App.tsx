@@ -1,9 +1,9 @@
-import { Button, Card, CardActions, CardContent, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Autocomplete, Button, Card, CardActions, CardContent, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 import { QueryClient, QueryClientProvider, useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react';
 
-import { addNote, fetchDecks, fetchModels } from './anki';
+import { addNote, fetchDecks, fetchModels, fetchTags } from './anki';
 import { suggestAnkiNotes } from './openai';
 
 interface Fields {
@@ -110,10 +110,14 @@ function Home() {
         queryKey: ["decks"]
     });
 
-
     const { data: models } = useQuery({
         queryFn: fetchModels,
         queryKey: ["models"]
+    });
+
+    const { data: tags } = useQuery({
+        queryFn: fetchTags,
+        queryKey: ["tags"]
     });
 
     const [notes, setNotes] = useState<Note[]>([])
@@ -127,6 +131,7 @@ function Home() {
 
     const [deckName, setDeckName] = useLocalStorage("deckName", "Default")
     const [modelName, setModelName] = useLocalStorage("modelName", "Basic")
+    const [currentTags, setCurrentTags] = useLocalStorage<string[]>("tags", [])
 
     const [prompt, setPrompt] = useState("")
 
@@ -163,6 +168,18 @@ function Home() {
                             {models && models.map(modelName =>
                                 <MenuItem key={"model" + modelName} value={modelName}>{modelName}</MenuItem>)}
                         </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item>
+                    <FormControl fullWidth>
+                        <Autocomplete
+                            id="tags"
+                            multiple
+                            value={currentTags}
+                            options={tags || []}
+                            onChange={(_, value) => { value && setCurrentTags(value) }}
+                            renderInput={(params) => <TextField label="Tags" {...params} />}
+                            />
                     </FormControl>
                 </Grid>
                 <Grid item>
