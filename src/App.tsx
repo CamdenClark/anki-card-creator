@@ -1,7 +1,7 @@
-import { Button, Card, CardActions, CardContent, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 import { QueryClient, QueryClientProvider, useMutation, useQuery } from '@tanstack/react-query'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { addNote, fetchDecks, fetchModels } from './anki';
 import { suggestAnkiNotes } from './openai';
@@ -22,7 +22,7 @@ const NoteComponent: React.FC<CardProps> = ({ note }) => {
     const { fields, deckName, modelName } = note;
     const [formState, setFormState] = useState(fields);
     const [hidden, setHidden] = useState(false);
-    const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const handleChange = (event: React.ChangeEvent<{ name: string, value: unknown }>) => {
         setFormState({ ...formState, [event.target.name]: event.target.value });
     };
 
@@ -91,10 +91,13 @@ function Home() {
         queryKey: ["decks"]
     });
 
+
     const { data: models } = useQuery({
         queryFn: fetchModels,
         queryKey: ["models"]
     });
+
+    const [notes, setNotes] = useState<Note[]>([])
 
     const { isLoading, mutate } = useMutation({
         mutationFn: suggestAnkiNotes,
@@ -104,10 +107,15 @@ function Home() {
     })
 
     const [deckName, setDeckName] = useState("")
-    const [modelName, setModelName] = useState("")
+    const [modelName, setModelName] = useState("Basic")
     const [prompt, setPrompt] = useState("")
 
-    const [notes, setNotes] = useState([])
+
+    useEffect(() => {
+        if (decks && decks.length > 0) {
+            setDeckName(decks[0]);
+        }
+    }, [decks])
 
     return (
         <Grid container sx={{ padding: "25px", maxWidth: 1200 }} spacing={4} justifyContent="flex-start"
@@ -159,10 +167,14 @@ function Home() {
                     <Button
                         variant="contained"
                         color="primary"
+                        disabled={isLoading}
                         onClick={(_) => mutate({ deckName, modelName, prompt })}>
                         Suggest cards
                     </Button>
                 </Grid>
+            </Grid>
+            <Grid container item>
+                {isLoading && <CircularProgress />}
             </Grid>
             <Grid container item spacing={2} alignItems="stretch">
                 {notes.map(note =>
