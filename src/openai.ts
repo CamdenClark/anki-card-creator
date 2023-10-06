@@ -23,7 +23,7 @@ export async function suggestAnkiNotes(
         messages: [
             {
                 role: 'system',
-                content: 'You are a helpful assistant.'
+                content: 'Convert the following info into a concise Anki card. Make it clear enough to stand alone.'
             },
             {
                 role: 'user',

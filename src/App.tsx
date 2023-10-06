@@ -18,6 +18,25 @@ interface Note {
 interface CardProps {
     note: Note;
 }
+function useLocalStorage<T>(
+  storageKey: string, 
+  fallbackState: T
+): [T, React.Dispatch<React.SetStateAction<T>>] {
+  const [value, setValue] = useState<T>(() => {
+    const storedValue = localStorage.getItem(storageKey);
+    if (storedValue !== null) {
+      return JSON.parse(storedValue);
+    }
+    return fallbackState;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(storageKey, JSON.stringify(value));
+  }, [value, storageKey]);
+
+  return [value, setValue];
+}
+
 const NoteComponent: React.FC<CardProps> = ({ note }) => {
     const { fields, deckName, modelName } = note;
     const [formState, setFormState] = useState(fields);
@@ -106,16 +125,10 @@ function Home() {
         }
     })
 
-    const [deckName, setDeckName] = useState("")
-    const [modelName, setModelName] = useState("Basic")
+    const [deckName, setDeckName] = useLocalStorage("deckName", "Default")
+    const [modelName, setModelName] = useLocalStorage("modelName", "Basic")
+
     const [prompt, setPrompt] = useState("")
-
-
-    useEffect(() => {
-        if (decks && decks.length > 0) {
-            setDeckName(decks[0]);
-        }
-    }, [decks])
 
     return (
         <Grid container sx={{ padding: "25px", maxWidth: 1200 }} spacing={4} justifyContent="flex-start"

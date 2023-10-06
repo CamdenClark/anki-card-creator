@@ -19,6 +19,10 @@ const ankiConnect = async (params: any) => {
     return data.result;
 }
 
+export const fetchTags = async (): Promise<string[]> => {
+    return ankiConnect({ action: "getTags" });
+}
+
 export const fetchDecks = async (): Promise<string[]> => {
     return ankiConnect({ action: "deckNames" });
 }
