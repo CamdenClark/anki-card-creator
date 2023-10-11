@@ -14,41 +14,60 @@ interface Note {
     modelName: string;
     deckName: string;
     fields: Fields;
+    tags: string[];
 }
 interface CardProps {
     note: Note;
 }
 function useLocalStorage<T>(
-  storageKey: string, 
-  fallbackState: T
+    storageKey: string,
+    fallbackState: T
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
-  const [value, setValue] = useState<T>(() => {
-    const storedValue = localStorage.getItem(storageKey);
-    if (storedValue !== null) {
-      return JSON.parse(storedValue);
-    }
-    return fallbackState;
-  });
+    const [value, setValue] = useState<T>(() => {
+        const storedValue = localStorage.getItem(storageKey);
+        if (storedValue !== null) {
+            return JSON.parse(storedValue);
+        }
+        return fallbackState;
+    });
 
-  useEffect(() => {
-    localStorage.setItem(storageKey, JSON.stringify(value));
-  }, [value, storageKey]);
+    useEffect(() => {
+        localStorage.setItem(storageKey, JSON.stringify(value));
+    }, [value, storageKey]);
 
-  return [value, setValue];
+    return [value, setValue];
 }
 
 const NoteComponent: React.FC<CardProps> = ({ note }) => {
-    const { fields, deckName, modelName } = note;
-    const [formState, setFormState] = useState(fields);
-    const [hidden, setHidden] = useState(false);
-    const handleChange = (event: React.ChangeEvent<{ name: string, value: unknown }>) => {
-        setFormState({ ...formState, [event.target.name]: event.target.value });
+    const [currentNote, setCurrentNote] = useState(note);
+    const { modelName, deckName, fields, tags } = currentNote;
+
+    const handleFieldChange = (event: React.ChangeEvent<{ name: string, value: unknown }>) => {
+        setCurrentNote(prev => ({
+            ...prev,
+            fields: { ...prev.fields, [event.target.name]: event.target.value }
+        }));
     };
+
+    const handleTagsChange = (_: any, tags: string[]) => {
+        setCurrentNote(prev => ({
+            ...prev,
+            tags
+        }));
+    };
+
+    const [hidden, setHidden] = useState(false);
+
 
     const { isLoading, mutate } = useMutation({
         mutationFn: addNote,
         onSuccess: (_) => setHidden(true),
     })
+
+    const { data: allTags } = useQuery({
+        queryFn: fetchTags,
+        queryKey: ["tags"]
+    });
 
     return !hidden && (
         <Grid item xs={12} md={6}>
@@ -69,13 +88,24 @@ const NoteComponent: React.FC<CardProps> = ({ note }) => {
                                 disabled
                             />
                         </Grid>
+                        <Grid item xs={6}>
+                            <Autocomplete
+                                id="tags"
+                                multiple
+                                autoHighlight
+                                value={tags}
+                                options={allTags || []}
+                                onChange={handleTagsChange}
+                                renderInput={(params) => <TextField label="Tags" {...params} />}
+                            />
+                        </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 fullWidth
                                 label="Front"
                                 defaultValue={fields.Front}
                                 multiline
-                                onChange={handleChange}
+                                onChange={handleFieldChange}
                                 name="front"
                             />
                         </Grid>
@@ -85,7 +115,7 @@ const NoteComponent: React.FC<CardProps> = ({ note }) => {
                                 label="Back"
                                 defaultValue={fields.Back}
                                 multiline
-                                onChange={handleChange}
+                                onChange={handleFieldChange}
                                 name="back"
                             />
                         </Grid>
@@ -95,7 +125,7 @@ const NoteComponent: React.FC<CardProps> = ({ note }) => {
                     <Button size="small" color="secondary" onClick={() => setHidden(true)}>
                         Trash
                     </Button>
-                    <Button size="small" color="primary" onClick={() => mutate({ modelName, deckName, fields: formState })}
+                    <Button size="small" color="primary" onClick={() => mutate(currentNote)}
                         disabled={isLoading} >
                         Add note
                     </Button>
@@ -175,11 +205,12 @@ function Home() {
                         <Autocomplete
                             id="tags"
                             multiple
+                            autoHighlight
                             value={currentTags}
                             options={tags || []}
                             onChange={(_, value) => { value && setCurrentTags(value) }}
                             renderInput={(params) => <TextField label="Tags" {...params} />}
-                            />
+                        />
                     </FormControl>
                 </Grid>
                 <Grid item>
@@ -198,7 +229,7 @@ function Home() {
                         variant="contained"
                         color="primary"
                         disabled={isLoading}
-                        onClick={(_) => mutate({ deckName, modelName, prompt })}>
+                        onClick={(_) => mutate({ deckName, modelName, tags: currentTags, prompt })}>
                         Suggest cards
                     </Button>
                 </Grid>

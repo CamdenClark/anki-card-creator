@@ -1,5 +1,5 @@
 export async function suggestAnkiNotes(
-    { deckName, modelName, prompt }
+    { deckName, modelName, prompt, tags }
 ): Promise<any> {
     const function_parameters: object = {
         type: "object",
@@ -61,6 +61,7 @@ export async function suggestAnkiNotes(
     ({
         deckName,
         modelName,
-        fields
+        fields,
+        tags
     }))
 }
