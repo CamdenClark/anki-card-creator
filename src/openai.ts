@@ -1,7 +1,14 @@
-const systemPrompt = (notes) => {
-    return `Convert the following info into a concise Anki card. Make it clear enough to stand alone.`
-
-};
+ const systemPrompt = (notes) => {
+     let notesString = '';
+     notes.forEach((note, index) => {
+         notesString += `\nNote ${index + 1}:\n`;
+         for (const [field, value] of Object.entries(note.fields)) {
+             notesString += `${field}: ${value}\n`;
+         }
+     });
+     return `Convert the following info into a concise Anki card. Make i
+ clear enough to stand alone.${notesString}`
+ };
 
 export async function suggestAnkiNotes(
     { deckName, modelName, prompt, tags, recentNotes }
