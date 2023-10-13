@@ -3,7 +3,7 @@ import { Autocomplete, Button, Card, CardActions, CardContent, CircularProgress,
 import { QueryClient, QueryClientProvider, useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react';
 
-import { addNote, fetchDecks, fetchModels, fetchTags } from './anki';
+import { addNote, fetchDecks, fetchModels, fetchTags, fetchRecentNotes } from './anki';
 import { suggestAnkiNotes } from './openai';
 
 interface Fields {
@@ -162,6 +162,12 @@ function Home() {
     const [deckName, setDeckName] = useLocalStorage("deckName", "Default")
     const [modelName, setModelName] = useLocalStorage("modelName", "Basic")
     const [currentTags, setCurrentTags] = useLocalStorage<string[]>("tags", [])
+
+    const { data: recentNotes } = useQuery({
+        queryFn: () => fetchRecentNotes(currentTags),
+        queryKey: ["recentNotes", currentTags],
+        enabled: currentTags.length > 0,
+    });
 
     const [prompt, setPrompt] = useState("")
 
