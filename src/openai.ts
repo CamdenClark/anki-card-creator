@@ -1,5 +1,5 @@
 export async function suggestAnkiNotes(
-    { deckName, modelName, prompt, tags }
+    { deckName, modelName, prompt, tags, recentNotes }
 ): Promise<any> {
     const function_parameters: object = {
         type: "object",
@@ -28,6 +28,10 @@ export async function suggestAnkiNotes(
             {
                 role: 'user',
                 content: prompt,
+            },
+            {
+                role: 'assistant',
+                content: JSON.stringify(recentNotes),
             },
         ],
         functions: [

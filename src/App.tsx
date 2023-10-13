@@ -153,7 +153,7 @@ function Home() {
     const [notes, setNotes] = useState<Note[]>([])
 
     const { isLoading, mutate } = useMutation({
-        mutationFn: suggestAnkiNotes,
+        mutationFn: (args) => suggestAnkiNotes({ ...args, recentNotes }),
         onSuccess: (newNotes) => {
             setNotes(notes => [...notes, ...newNotes])
         }
@@ -169,6 +169,7 @@ function Home() {
     });
 
     const [prompt, setPrompt] = useState("")
+    const [recentNotes, setRecentNotes] = useState([])
 
     return (
         <Grid container sx={{ padding: "25px", maxWidth: 1200 }} spacing={4} justifyContent="flex-start"
@@ -235,7 +236,7 @@ function Home() {
                         variant="contained"
                         color="primary"
                         disabled={isLoading}
-                        onClick={(_) => mutate({ deckName, modelName, tags: currentTags, prompt })}>
+                        onClick={(_) => mutate({ deckName, modelName, tags: currentTags, prompt, recentNotes })}>
                         Suggest cards
                     </Button>
                 </Grid>
