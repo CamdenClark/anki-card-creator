@@ -166,7 +166,6 @@ function Home() {
     const { data: recentNotes } = useQuery({
         queryFn: () => fetchRecentNotes(currentTags),
         queryKey: ["recentNotes", currentTags],
-        enabled: currentTags.length > 0,
     });
 
     const [prompt, setPrompt] = useState("")
