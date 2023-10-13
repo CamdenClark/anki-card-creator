@@ -45,7 +45,7 @@ export const fetchModelFieldNames = async (modelName: string): Promise<string[]>
 }
 
 export const fetchRecentNotes = async (tags: string[]): Promise<any[]> => {
-    const searchString = `added:30 ${tags.join(' ')}`;
+    const searchString = `added:30 ${tags.map(tag => `tag:${tag}`).join(' ')}`;
     const noteIds = await ankiConnect({
         action: "findNotes",
         params: { query: searchString }
