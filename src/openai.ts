@@ -33,7 +33,7 @@ export async function suggestAnkiNotes(
         messages: [
             {
                 role: 'system',
-                content: ''
+                content: systemPrompt(recentNotes)
             },
             {
                 role: 'user',
