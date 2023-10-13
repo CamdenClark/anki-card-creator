@@ -50,9 +50,9 @@ export const fetchRecentNotes = async (tags: string[]): Promise<any[]> => {
         action: "findNotes",
         params: { query: searchString }
     });
-    const notes = await Promise.all(noteIds.map(id => ankiConnect({
+    const notes = await ankiConnect({
         action: "notesInfo",
-        params: { notes: [id] }
-    })));
-    return notes.flat();
+        params: { notes: noteIds }
+    });
+    return notes;
 }
