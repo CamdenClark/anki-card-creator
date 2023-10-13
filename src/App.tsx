@@ -150,14 +150,8 @@ function Home() {
         queryKey: ["tags"]
     });
 
-    const [notes, setNotes] = useState<Note[]>([])
 
-    const { isLoading, mutate } = useMutation({
-        mutationFn: (args) => suggestAnkiNotes({ ...args, recentNotes }),
-        onSuccess: (newNotes) => {
-            setNotes(notes => [...notes, ...newNotes])
-        }
-    })
+    const [notes, setNotes] = useState<Note[]>([])
 
     const [deckName, setDeckName] = useLocalStorage("deckName", "Default")
     const [modelName, setModelName] = useLocalStorage("modelName", "Basic")
@@ -168,8 +162,15 @@ function Home() {
         queryKey: ["recentNotes", currentTags],
     });
 
+
+    const { isLoading, mutate } = useMutation({
+        mutationFn: suggestAnkiNotes,
+        onSuccess: (newNotes) => {
+            setNotes(notes => [...notes, ...newNotes])
+        }
+    })
+
     const [prompt, setPrompt] = useState("")
-    const [recentNotes, setRecentNotes] = useState([])
 
     return (
         <Grid container sx={{ padding: "25px", maxWidth: 1200 }} spacing={4} justifyContent="flex-start"
@@ -236,7 +237,7 @@ function Home() {
                         variant="contained"
                         color="primary"
                         disabled={isLoading}
-                        onClick={(_) => mutate({ deckName, modelName, tags: currentTags, prompt, recentNotes })}>
+                        onClick={(_) => mutate({ deckName, modelName, tags: currentTags, prompt, recentNotes  })}>
                         Suggest cards
                     </Button>
                 </Grid>
