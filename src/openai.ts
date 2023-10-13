@@ -1,3 +1,8 @@
+const systemPrompt = (notes) => {
+    return `Convert the following info into a concise Anki card. Make it clear enough to stand alone.`
+
+};
+
 export async function suggestAnkiNotes(
     { deckName, modelName, prompt, tags, recentNotes }
 ): Promise<any> {
@@ -23,7 +28,7 @@ export async function suggestAnkiNotes(
         messages: [
             {
                 role: 'system',
-                content: 'Convert the following info into a concise Anki card. Make it clear enough to stand alone.'
+                content: ''
             },
             {
                 role: 'user',
