@@ -43,3 +43,16 @@ export const fetchModelFieldNames = async (modelName: string): Promise<string[]>
         params: { modelName }
     });
 }
+
+export const fetchRecentNotes = async (tags: string[]): Promise<any[]> => {
+    const searchString = `added:30 ${tags.join(' ')}`;
+    const noteIds = await ankiConnect({
+        action: "findNotes",
+        params: { query: searchString }
+    });
+    const notes = await Promise.all(noteIds.map(id => ankiConnect({
+        action: "notesInfo",
+        params: { notes: [id] }
+    })));
+    return notes.flat();
+}
