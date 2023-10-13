@@ -192,6 +192,7 @@ function Home() {
                             labelId="note-type-label"
                             label="Note type"
                             id="note-type"
+                            disabled
                             value={modelName}
                             onChange={e => { e.target.value && setModelName(e.target.value) }}
                         >
