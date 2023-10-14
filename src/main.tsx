@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { Outlet, RouterProvider, createBrowserRouter, Link } from 'react-router-dom'
 
 import Settings from './Settings.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -14,6 +14,7 @@ function Root() {
             <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6" component="div">anki card creator</Typography>
+                    <Link to="/settings">Settings</Link>
                 </Toolbar>
             </AppBar>
             <Outlet />
