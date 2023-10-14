@@ -1,36 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import Settings from './Settings.tsx';
-
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <App />,
-        children: [
-            {
-                path: "settings",
-                element: <Settings />,
-            },
-        ],
-    },
-]);
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import { AppBar, Toolbar, Typography } from '@mui/material';
-import { Outlet } from 'react-router-dom';
 
 function Root() {
     return (
         <>
             <AppBar position="static">
                 <Toolbar>
-                    <Typography variant="h6" component="div">
-                        My App
-                    </Typography>
+                    <Typography variant="h6" component="div">anki card creator</Typography>
                 </Toolbar>
             </AppBar>
             <Outlet />
