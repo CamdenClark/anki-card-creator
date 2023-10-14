@@ -218,6 +218,17 @@ function Home() {
                             value={currentTags}
                             options={tags || []}
                             onChange={(_, value) => { value && setCurrentTags(value) }}
+                            filterOptions={(options, params) => {
+                                const filtered = options.filter((option) =>
+                                    option.toLowerCase().includes(params.inputValue.toLowerCase())
+                                );
+
+                                if (params.inputValue !== '') {
+                                    filtered.push(`Add "${params.inputValue}"`);
+                                }
+
+                                return filtered;
+                            }}
                             renderInput={(params) => <TextField label="Tags" {...params} />}
                         />
                     </FormControl>
