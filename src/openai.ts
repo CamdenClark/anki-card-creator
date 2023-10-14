@@ -1,6 +1,6 @@
 const systemPrompt = (recentNotes) => {
     let notesString = '';
-    recentNotes.forEach((note) => {
+    recentNotes.slice(-5).forEach((note) => {
         for (const [field, value] of Object.entries(note.fields)) {
             notesString += `${field}: ${value.value}\n`;
         }
