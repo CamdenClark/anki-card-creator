@@ -18,10 +18,14 @@ const router = createBrowserRouter([
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
-        <QueryClientProvider client={new QueryClient()}>
-            <RouterProvider router={router} />
-        </QueryClientProvider>
-    </React.StrictMode>,
-)
+function Root() {
+    return (
+        <React.StrictMode>
+            <QueryClientProvider client={new QueryClient()}>
+                <RouterProvider router={router} />
+            </QueryClientProvider>
+        </React.StrictMode>
+    );
+}
+
+ReactDOM.createRoot(document.getElementById('root')!).render(<Root />)
