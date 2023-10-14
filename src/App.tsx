@@ -10,15 +10,18 @@ interface Fields {
     Front: string;
     Back: string;
 }
+
 interface Note {
     modelName: string;
     deckName: string;
     fields: Fields;
     tags: string[];
 }
+
 interface CardProps {
     note: Note;
 }
+
 function useLocalStorage<T>(
     storageKey: string,
     fallbackState: T
