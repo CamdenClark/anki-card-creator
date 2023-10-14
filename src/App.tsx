@@ -1,7 +1,7 @@
 import { Autocomplete, Button, Card, CardActions, CardContent, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { addNote, fetchDecks, fetchModels, fetchTags, fetchRecentNotes } from './anki';
 import { suggestAnkiNotes } from './openai';
@@ -150,9 +150,10 @@ function Home() {
         queryKey: ["recentNotes", currentTags],
     });
 
+    const { openAIKey } = useContext(OpenAIKeyContext);
 
     const { isLoading, mutate } = useMutation({
-        mutationFn: suggestAnkiNotes,
+        mutationFn: (data) => suggestAnkiNotes(openAIKey, data),
         onSuccess: (newNotes) => {
             setNotes(notes => [...notes, ...newNotes])
         }
