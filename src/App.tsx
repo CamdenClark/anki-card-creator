@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { addNote, fetchDecks, fetchModels, fetchTags, fetchRecentNotes } from './anki';
 import { suggestAnkiNotes } from './openai';
+import { OpenAIKeyContext } from './OpenAIKeyContext';
 
 interface Fields {
     Front: string;
