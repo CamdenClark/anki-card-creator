@@ -1,4 +1,4 @@
-const systemPrompt = (recentNotes) => {
+const systemPrompt = (recentNotes, tags) => {
     const notesString = recentNotes.slice(-5).map((note) => {
         return Object.entries(note.fields).map(([field, value]) => `${field}: ${value.value}`).join('\n');
     }).join('\n');
@@ -10,7 +10,7 @@ grammar necessarily.
 
 ${notesString.length > 0 && "Here are some examples of cards we have:\n" + notesString}
 
-Create cards based on the user's passed in prompt.`
+Create cards based on the user's passed in prompt. The tags for these cards are: ${tags.join(', ')}`
 };
 
 export async function suggestAnkiNotes(
