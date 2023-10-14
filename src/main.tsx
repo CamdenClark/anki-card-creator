@@ -1,15 +1,13 @@
-import React, { createContext } from 'react'
-import useLocalStorage from './useLocalStorage';
+import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import { Outlet, RouterProvider, createBrowserRouter, Link } from 'react-router-dom'
-
-export const OpenAIKeyContext = createContext();
+import { AppBar, Toolbar, Typography } from '@mui/material';
+import OpenAIKeyContextProvider from './OpenAIKeyContext';
 
 function Root() {
-    const [openAIKey, setOpenAIKey] = useLocalStorage('openAIKey', '');
     return (
-        <OpenAIKeyContext.Provider value={{ openAIKey, setOpenAIKey }}>
+        <OpenAIKeyContextProvider>
             <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6" component={Link} to="/" color="inherit" sx={{ textDecoration: 'none' }}>anki card creator</Typography>
@@ -17,7 +15,7 @@ function Root() {
                 </Toolbar>
             </AppBar>
             <Outlet />
-        </OpenAIKeyContext.Provider>
+        </OpenAIKeyContextProvider>
     );
 }
 
