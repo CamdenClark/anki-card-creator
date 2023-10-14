@@ -1,6 +1,6 @@
 import { Autocomplete, Button, Card, CardActions, CardContent, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
-import { QueryClient, QueryClientProvider, useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react';
 
 import { addNote, fetchDecks, fetchModels, fetchTags, fetchRecentNotes } from './anki';
