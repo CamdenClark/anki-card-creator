@@ -1,6 +1,6 @@
-const systemPrompt = (notes) => {
+const systemPrompt = (recentNotes) => {
     let notesString = '';
-    notes.forEach((note) => {
+    recentNotes.forEach((note) => {
         for (const [field, value] of Object.entries(note.fields)) {
             notesString += `${field}: ${value}\n`;
         }
