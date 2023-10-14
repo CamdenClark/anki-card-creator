@@ -218,17 +218,7 @@ function Home() {
                             value={currentTags}
                             options={tags || []}
                             onChange={(_, value) => { value && setCurrentTags(value) }}
-                            filterOptions={(options, params) => {
-                                const filtered = options.filter((option) =>
-                                    option.toLowerCase().includes(params.inputValue.toLowerCase())
-                                );
-
-                                if (params.inputValue !== '') {
-                                    filtered.push(`Add "${params.inputValue}"`);
-                                }
-
-                                return filtered;
-                            }}
+                            freeSolo
                             renderInput={(params) => <TextField label="Tags" {...params} />}
                         />
                     </FormControl>
@@ -249,7 +239,7 @@ function Home() {
                         variant="contained"
                         color="primary"
                         disabled={isLoading}
-                        onClick={(_) => mutate({ deckName, modelName, tags: currentTags, prompt, recentNotes  })}>
+                        onClick={(_) => mutate({ deckName, modelName, tags: currentTags, prompt, recentNotes })}>
                         Suggest cards
                     </Button>
                 </Grid>
