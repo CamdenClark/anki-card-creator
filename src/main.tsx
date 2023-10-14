@@ -1,4 +1,5 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext } from 'react'
+import useLocalStorage from './useLocalStorage';
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import { Outlet, RouterProvider, createBrowserRouter, Link } from 'react-router-dom'
@@ -6,7 +7,7 @@ import { Outlet, RouterProvider, createBrowserRouter, Link } from 'react-router-
 export const OpenAIKeyContext = createContext();
 
 function Root() {
-    const [openAIKey, setOpenAIKey] = useState('');
+    const [openAIKey, setOpenAIKey] = useLocalStorage('openAIKey', '');
     return (
         <OpenAIKeyContext.Provider value={{ openAIKey, setOpenAIKey }}>
             <AppBar position="static">
