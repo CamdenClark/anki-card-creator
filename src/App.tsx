@@ -257,12 +257,4 @@ function Home() {
     );
 }
 
-function App() {
-    return (
-        <QueryClientProvider client={new QueryClient()}>
-            <Home />
-        </QueryClientProvider>
-    )
-}
-
-export default App
+export default Home
