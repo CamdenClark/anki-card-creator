@@ -1,7 +1,7 @@
 import { Autocomplete, Button, Card, CardActions, CardContent, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 
 import { addNote, fetchDecks, fetchModels, fetchTags, fetchRecentNotes } from './anki';
 import { suggestAnkiNotes } from './openai';
@@ -236,8 +236,8 @@ function Home() {
                 {isLoading && <CircularProgress />}
             </Grid>
             <Grid container item spacing={2} alignItems="stretch">
-                {notes.map(note =>
-                    <NoteComponent note={note} />
+                {notes.map((note, i) =>
+                    <NoteComponent key={i} note={note} />
                 )}
             </Grid>
         </Grid>
