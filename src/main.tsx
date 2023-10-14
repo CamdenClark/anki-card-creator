@@ -13,8 +13,8 @@ function Root() {
         <>
             <AppBar position="static">
                 <Toolbar>
-                    <Typography variant="h6" component={Link} to="/" color="inherit">anki card creator</Typography>
-                    <Typography sx={{ marginLeft: 4 }} component={Link} to="/settings" color="inherit">Settings</Typography>
+                    <Typography variant="h6" component={Link} to="/" color="inherit" sx={{ textDecoration: 'none' }}>anki card creator</Typography>
+                    <Typography sx={{ marginLeft: 4, textDecoration: 'none' }} component={Link} to="/settings" color="inherit">Settings</Typography>
                 </Toolbar>
             </AppBar>
             <Outlet />
