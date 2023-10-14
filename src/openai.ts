@@ -1,10 +1,7 @@
 const systemPrompt = (recentNotes) => {
-    let notesString = '';
-    recentNotes.slice(-5).forEach((note) => {
-        for (const [field, value] of Object.entries(note.fields)) {
-            notesString += `${field}: ${value.value}\n`;
-        }
-    });
+    const notesString = recentNotes.slice(-5).map((note) => {
+        return Object.entries(note.fields).map(([field, value]) => `${field}: ${value.value}`).join('\n');
+    }).join('\n');
     return `You are an assistant assigned to create Anki cards.
 You should make sure all cards are concise but have
 enough context to understand seen out of context when reviewed
@@ -19,6 +16,7 @@ Create cards based on the user's passed in prompt.`
 export async function suggestAnkiNotes(
     { deckName, modelName, prompt, tags, recentNotes }
 ): Promise<any> {
+    console.log(systemPrompt(recentNotes))
     const function_parameters: object = {
         type: "object",
         properties: {
