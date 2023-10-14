@@ -14,7 +14,9 @@ function Root() {
             <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6" component="div">anki card creator</Typography>
-                    <Link to="/settings">Settings</Link>
+                    <Typography sx={{ marginLeft: 4 }}>
+                        <Link to="/settings">Settings</Link>
+                    </Typography>
                 </Toolbar>
             </AppBar>
             <Outlet />
