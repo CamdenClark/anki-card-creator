@@ -146,8 +146,8 @@ function Home() {
     const [currentTags, setCurrentTags] = useLocalStorage<string[]>("tags", [])
 
     const { data: recentNotes } = useQuery({
-        queryFn: () => fetchRecentNotes(currentTags),
-        queryKey: ["recentNotes", currentTags],
+        queryFn: () => fetchRecentNotes(modelName, currentTags),
+        queryKey: ["recentNotes", modelName, currentTags],
     });
 
     const { openAIKey } = useContext(OpenAIKeyContext);
