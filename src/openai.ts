@@ -17,6 +17,7 @@ Create cards based on the user's passed in prompt.`
 };
 
 export async function suggestAnkiNotes(
+    openAIKey: string,
     { deckName, modelName, prompt, tags, recentNotes }
 ): Promise<any> {
     console.log(systemPrompt(recentNotes, tags))
@@ -61,10 +62,10 @@ export async function suggestAnkiNotes(
     };
     const res = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
-        },
+    headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${openAIKey}`,
+    },
         body: JSON.stringify(body),
     });
 
