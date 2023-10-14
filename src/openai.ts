@@ -8,15 +8,18 @@ enough context to understand seen out of context when reviewed
 in the future. You don't need to be chatty, or have proper
 grammar necessarily.
 
-${notesString.length > 0 && "Here are some examples of cards we have:\n" + notesString}
+Tags associated with these cards are: ${tags.join(', ')}
 
-Create cards based on the user's passed in prompt. The tags for these cards are: ${tags.join(', ')}`
+${notesString.length > 0 && 
+    "Here are some examples of notes recently created by the user:\n" + notesString}
+
+Create cards based on the user's passed in prompt.`
 };
 
 export async function suggestAnkiNotes(
     { deckName, modelName, prompt, tags, recentNotes }
 ): Promise<any> {
-    console.log(systemPrompt(recentNotes))
+    console.log(systemPrompt(recentNotes, tags))
     const function_parameters: object = {
         type: "object",
         properties: {
@@ -39,7 +42,7 @@ export async function suggestAnkiNotes(
         messages: [
             {
                 role: 'system',
-                content: systemPrompt(recentNotes)
+                content: systemPrompt(recentNotes, tags)
             },
             {
                 role: 'user',

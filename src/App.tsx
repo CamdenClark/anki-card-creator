@@ -93,6 +93,7 @@ const NoteComponent: React.FC<CardProps> = ({ note }) => {
                                 id="tags"
                                 multiple
                                 autoHighlight
+                                freeSolo
                                 value={tags}
                                 options={allTags || []}
                                 onChange={handleTagsChange}
