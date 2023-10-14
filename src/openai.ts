@@ -2,10 +2,18 @@ const systemPrompt = (recentNotes) => {
     let notesString = '';
     recentNotes.forEach((note) => {
         for (const [field, value] of Object.entries(note.fields)) {
-            notesString += `${field}: ${value}\n`;
+            notesString += `${field}: ${value.value}\n`;
         }
     });
-    return `Convert the following info into a concise Anki card. Make it clear enough to stand alone.${notesString}`
+    return `You are an assistant assigned to create Anki cards.
+You should make sure all cards are concise but have
+enough context to understand seen out of context when reviewed
+in the future. You don't need to be chatty, or have proper
+grammar necessarily.
+
+${notesString.length > 0 && "Here are some examples of cards we have:\n" + notesString}
+
+Create cards based on the user's passed in prompt.`
 };
 
 export async function suggestAnkiNotes(
@@ -38,11 +46,7 @@ export async function suggestAnkiNotes(
             {
                 role: 'user',
                 content: prompt,
-            },
-            {
-                role: 'assistant',
-                content: JSON.stringify(recentNotes),
-            },
+            }
         ],
         functions: [
             {
