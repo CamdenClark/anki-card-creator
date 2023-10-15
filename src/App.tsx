@@ -3,7 +3,7 @@ import { Autocomplete, Button, Card, CardActions, CardContent, CircularProgress,
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useContext, useState } from 'react';
 
-import { addNote, fetchDecks, fetchModels, fetchTags, fetchRecentNotes } from './anki';
+import { addNote, fetchDecks, fetchModels, fetchTags, fetchRecentNotes, fetchModelFieldNames } from './anki';
 import { suggestAnkiNotes } from './openai';
 import { OpenAIKeyContext } from './OpenAIKeyContext';
 
@@ -125,6 +125,11 @@ function Home() {
     const { data: tags } = useQuery({
         queryFn: fetchTags,
         queryKey: ["tags"]
+    });
+
+    const { data: modelFieldNames } = useQuery({
+        queryFn: () => fetchModelFieldNames(modelName),
+        queryKey: ["modelFieldNames", modelName],
     });
 
 
