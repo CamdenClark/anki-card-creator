@@ -24,11 +24,13 @@ const NoteComponent: React.FC<CardProps> = ({ note }) => {
     const [currentNote, setCurrentNote] = useState(note);
     const { modelName, deckName, fields, tags } = currentNote;
 
-    const handleFieldChange = (event: React.ChangeEvent<{ name: string, value: unknown }>) => {
-        setCurrentNote(prev => ({
-            ...prev,
-            fields: { ...prev.fields, [event.target.name]: event.target.value }
-        }));
+    const handleFieldChange = (event: React.ChangeEvent<{ name?: string, value: unknown }>) => {
+        if (event.target.name) {
+            setCurrentNote(prev => ({
+                ...prev,
+                fields: { ...prev.fields, [event.target.name]: event.target.value }
+            }));
+        }
     };
 
     const handleTagsChange = (_: any, tags: string[]) => {
@@ -82,26 +84,18 @@ const NoteComponent: React.FC<CardProps> = ({ note }) => {
                                 renderInput={(params) => <TextField label="Tags" {...params} />}
                             />
                         </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Front"
-                                defaultValue={fields.Front}
-                                multiline
-                                onChange={handleFieldChange}
-                                name="front"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Back"
-                                defaultValue={fields.Back}
-                                multiline
-                                onChange={handleFieldChange}
-                                name="back"
-                            />
-                        </Grid>
+                        {Object.keys(fields).map((fieldKey) => (
+                            <Grid item xs={12} key={fieldKey}>
+                                <TextField
+                                    fullWidth
+                                    label={fieldKey}
+                                    defaultValue={fields[fieldKey]}
+                                    multiline
+                                    onChange={handleFieldChange}
+                                    name={fieldKey}
+                                />
+                            </Grid>
+                        ))}
                     </Grid>
                 </CardContent>
                 <CardActions>
