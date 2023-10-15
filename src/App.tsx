@@ -127,16 +127,17 @@ function Home() {
         queryKey: ["tags"]
     });
 
+    const [notes, setNotes] = useState<Note[]>([])
+
+    const [deckName, setDeckName] = useLocalStorage("deckName", "Default")
+    const [modelName, setModelName] = useLocalStorage("modelName", "Basic")
+
     const { data: modelFieldNames } = useQuery({
         queryFn: () => fetchModelFieldNames(modelName),
         queryKey: ["modelFieldNames", modelName],
     });
 
 
-    const [notes, setNotes] = useState<Note[]>([])
-
-    const [deckName, setDeckName] = useLocalStorage("deckName", "Default")
-    const [modelName, setModelName] = useLocalStorage("modelName", "Basic")
     const [currentTags, setCurrentTags] = useLocalStorage<string[]>("tags", [])
 
     const { data: recentNotes } = useQuery({
