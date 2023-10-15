@@ -33,10 +33,12 @@ export async function suggestAnkiNotes(
                 items: {
                     type: "object",
                     properties: {
-                        Front: { type: "string" },
-                        Back: { type: "string" }
+                        ...modelFieldNames.reduce((acc, fieldName) => {
+                            acc[fieldName] = { type: "string" };
+                            return acc;
+                        }, {}),
                     },
-                    required: ["Front", "Back"]
+                    required: modelFieldNames
                 }
             },
         }
