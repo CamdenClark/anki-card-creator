@@ -7,15 +7,10 @@ import { addNote, fetchDecks, fetchModels, fetchTags, fetchRecentNotes } from '.
 import { suggestAnkiNotes } from './openai';
 import { OpenAIKeyContext } from './OpenAIKeyContext';
 
-interface Fields {
-    Front: string;
-    Back: string;
-}
-
 interface Note {
     modelName: string;
     deckName: string;
-    fields: Fields;
+    fields: object;
     tags: string[];
 }
 
