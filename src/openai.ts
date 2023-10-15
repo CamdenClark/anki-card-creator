@@ -8,6 +8,10 @@ enough context to understand seen out of context when reviewed
 in the future. You don't need to be chatty, or have proper
 grammar necessarily.
 
+Stick to the minimum information principle: The material you learn
+must be formulated in as simple way as it is only possible. 
+Simplicity does not have to imply losing information.
+
 Tags associated with these cards are: ${tags.join(', ')}
 
 ${notesString.length > 0 && 
@@ -20,7 +24,6 @@ export async function suggestAnkiNotes(
     openAIKey: string,
     { deckName, modelName, prompt, tags, recentNotes }
 ): Promise<any> {
-    console.log(systemPrompt(recentNotes, tags))
     const function_parameters: object = {
         type: "object",
         properties: {

@@ -45,7 +45,7 @@ export const fetchModelFieldNames = async (modelName: string): Promise<string[]>
 }
 
 export const fetchRecentNotes = async (modelName: string, tags: string[]): Promise<any[]> => {
-    const searchString = `added:90 ${tags.map(tag => `"tag:${tag}"`).join(' ')} note:${modelName}`;
+    const searchString = `added:90 ${tags.map(tag => `"tag:${tag}"`).join(' ')} "note:${modelName}"`;
     let noteIds = await ankiConnect({
         action: "findNotes",
         params: { query: searchString }
@@ -54,7 +54,7 @@ export const fetchRecentNotes = async (modelName: string, tags: string[]): Promi
     if (noteIds.length === 0) {
      noteIds = await ankiConnect({
         action: "findNotes",
-        params: { query: `added:30` }
+        params: { query: `added:30 "note:${modelName}"` }
     });
     }
 
