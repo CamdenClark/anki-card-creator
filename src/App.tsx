@@ -148,7 +148,7 @@ function Home() {
     const { openAIKey } = useContext(OpenAIKeyContext);
 
     const { isLoading, mutate } = useMutation({
-        mutationFn: (data) => suggestAnkiNotes(openAIKey, data),
+        mutationFn: (data) => suggestAnkiNotes(openAIKey, data, modelFieldNames),
         onSuccess: (newNotes) => {
             setNotes(notes => [...notes, ...newNotes])
         }
