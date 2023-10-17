@@ -11,8 +11,8 @@ function Settings() {
 
     return (
         <div>
-            <h1>Settings</h1>
-            <p>To generate the OpenAI API key, please follow the instructions on <a href="https://platform.openai.com/account/api-keys" target="_blank" rel="noopener noreferrer">this page</a>.</p>
+            <Typography variant="h4">Settings</Typography>
+            <Typography>To generate the OpenAI API key, please follow the instructions on <Link href="https://platform.openai.com/account/api-keys" target="_blank" rel="noopener noreferrer">this page</Link>.</Typography>
             <TextField
                 type="password"
                 label="OpenAI Key"
