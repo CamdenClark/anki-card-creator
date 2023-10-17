@@ -13,7 +13,7 @@ function Settings() {
         <Container>
             <Grid container direction="column" spacing={2}>
                 <Grid item>
-                    <Typography variant="h4">Settings</Typography>
+                    <Typography variant="h4" sx={{ mt: 2 }}>Settings</Typography>
                 </Grid>
                 <Grid item>
                     <Typography>To generate the OpenAI API key, please follow the instructions on <Link href="https://platform.openai.com/account/api-keys" target="_blank" rel="noopener noreferrer">this page</Link>.</Typography>
