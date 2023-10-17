@@ -16,6 +16,9 @@ function Settings() {
                     <Typography variant="h4" sx={{ mt: 2 }}>Settings</Typography>
                 </Grid>
                 <Grid item>
+                    <Typography variant="h6">OpenAI Settings</Typography>
+                </Grid>
+                <Grid item>
                     <Typography>To generate the OpenAI API key, please follow the instructions on <Link href="https://platform.openai.com/account/api-keys" target="_blank" rel="noopener noreferrer">this page</Link>.</Typography>
                 </Grid>
                 <Grid item>
@@ -25,6 +28,9 @@ function Settings() {
                         value={openAIKey}
                         onChange={handleOpenAIKeyChange}
                     />
+                </Grid>
+                <Grid item>
+                    <Typography variant="h6">AnkiConnect Settings</Typography>
                 </Grid>
             </Grid>
         </Container>
