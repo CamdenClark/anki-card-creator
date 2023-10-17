@@ -52,10 +52,10 @@ export const fetchRecentNotes = async (modelName: string, tags: string[]): Promi
     });
 
     if (noteIds.length === 0) {
-     noteIds = await ankiConnect({
-        action: "findNotes",
-        params: { query: `added:30 "note:${modelName}"` }
-    });
+        noteIds = await ankiConnect({
+            action: "findNotes",
+            params: { query: `added:365 "note:${modelName}"` }
+        });
     }
 
     const notes = await ankiConnect({
