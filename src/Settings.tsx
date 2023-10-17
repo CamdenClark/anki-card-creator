@@ -4,7 +4,7 @@ import useLocalStorage from './useLocalStorage';
 
 function Settings() {
     const [openAIKey, setOpenAIKey] = useLocalStorage('openAIKey', '');
-    const [ankiConnectUrl, setAnkiConnectUrl] = useLocalStorage('ankiConnectUrl', '');
+    const [ankiConnectUrl, setAnkiConnectUrl] = useLocalStorage('ankiConnectUrl', 'localhost:8765');
     const [ankiConnectKey, setAnkiConnectKey] = useLocalStorage('ankiConnectKey', '');
 
     const handleOpenAIKeyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
