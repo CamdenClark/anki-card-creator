@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField } from '@mui/material';
+import { TextField, Typography, Link } from '@mui/material';
 import useLocalStorage from './useLocalStorage';
 
 function Settings() {
