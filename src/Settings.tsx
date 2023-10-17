@@ -39,6 +39,7 @@ function Settings() {
                         label="AnkiConnect URL"
                         value={ankiConnectUrl}
                         onChange={(event) => setAnkiConnectUrl(event.target.value)}
+                        disabled
                     />
                 </Grid>
                 <Grid item>
@@ -47,6 +48,7 @@ function Settings() {
                         label="AnkiConnect Key"
                         value={ankiConnectKey}
                         onChange={(event) => setAnkiConnectKey(event.target.value)}
+                        disabled
                     />
                 </Grid>
             </Grid>
