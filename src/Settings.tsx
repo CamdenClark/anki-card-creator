@@ -4,6 +4,8 @@ import useLocalStorage from './useLocalStorage';
 
 function Settings() {
     const [openAIKey, setOpenAIKey] = useLocalStorage('openAIKey', '');
+    const [ankiConnectUrl, setAnkiConnectUrl] = useLocalStorage('ankiConnectUrl', '');
+    const [ankiConnectKey, setAnkiConnectKey] = useLocalStorage('ankiConnectKey', '');
 
     const handleOpenAIKeyChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setOpenAIKey(event.target.value);
@@ -31,6 +33,21 @@ function Settings() {
                 </Grid>
                 <Grid item>
                     <Typography variant="h6">AnkiConnect Settings</Typography>
+                </Grid>
+                <Grid item>
+                    <TextField
+                        label="AnkiConnect URL"
+                        value={ankiConnectUrl}
+                        onChange={(event) => setAnkiConnectUrl(event.target.value)}
+                    />
+                </Grid>
+                <Grid item>
+                    <TextField
+                        type="password"
+                        label="AnkiConnect Key"
+                        value={ankiConnectKey}
+                        onChange={(event) => setAnkiConnectKey(event.target.value)}
+                    />
                 </Grid>
             </Grid>
         </Container>
