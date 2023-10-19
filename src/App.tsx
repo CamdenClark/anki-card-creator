@@ -3,7 +3,7 @@ import { Autocomplete, Button, Card, CardActions, CardContent, CircularProgress,
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useContext, useState } from 'react';
 
-import { addNote, fetchDecks, fetchModels, fetchTags, fetchRecentNotes, fetchModelFieldNames } from './anki';
+import { addNote, fetchDecks, fetchTags, fetchModelFieldNames } from './anki';
 import { suggestAnkiNotes } from './openai';
 import { OpenAIKeyContext } from './OpenAIKeyContext';
 
@@ -111,15 +111,11 @@ const NoteComponent: React.FC<CardProps> = ({ note }) => {
         </Grid>
     );
 };
+
 function Home() {
     const { data: decks } = useQuery({
         queryFn: fetchDecks,
         queryKey: ["decks"]
-    });
-
-    const { data: models } = useQuery({
-        queryFn: fetchModels,
-        queryKey: ["models"]
     });
 
     const { data: tags } = useQuery({
@@ -130,25 +126,15 @@ function Home() {
     const [notes, setNotes] = useState<Note[]>([])
 
     const [deckName, setDeckName] = useLocalStorage("deckName", "Default")
-    const [modelName, setModelName] = useLocalStorage("modelName", "Basic")
-
-    const { data: modelFieldNames } = useQuery({
-        queryFn: () => fetchModelFieldNames(modelName),
-        queryKey: ["modelFieldNames", modelName],
-    });
+    const modelName = "Basic";
 
 
     const [currentTags, setCurrentTags] = useLocalStorage<string[]>("tags", [])
 
-    const { data: recentNotes } = useQuery({
-        queryFn: () => fetchRecentNotes(modelName, currentTags),
-        queryKey: ["recentNotes", modelName, currentTags],
-    });
-
     const { openAIKey } = useContext(OpenAIKeyContext);
 
     const { isLoading, mutate } = useMutation({
-        mutationFn: (data) => suggestAnkiNotes(openAIKey, data, modelFieldNames),
+        mutationFn: (data) => suggestAnkiNotes(openAIKey, data),
         onSuccess: (newNotes) => {
             setNotes(notes => [...notes, ...newNotes])
         }
@@ -173,21 +159,6 @@ function Home() {
                         >
                             {decks && decks.map(deckName =>
                                 <MenuItem key={"deck" + deckName} value={deckName}>{deckName}</MenuItem>)}
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item>
-                    <FormControl fullWidth>
-                        <InputLabel id="note-type-label">Note type</InputLabel>
-                        <Select
-                            labelId="note-type-label"
-                            label="Note type"
-                            id="note-type"
-                            value={modelName}
-                            onChange={e => { e.target.value && setModelName(e.target.value) }}
-                        >
-                            {models && models.map(modelName =>
-                                <MenuItem key={"model" + modelName} value={modelName}>{modelName}</MenuItem>)}
                         </Select>
                     </FormControl>
                 </Grid>
@@ -221,7 +192,7 @@ function Home() {
                         variant="contained"
                         color="primary"
                         disabled={isLoading}
-                        onClick={(_) => mutate({ deckName, modelName, tags: currentTags, prompt, recentNotes })}>
+                        onClick={(_) => mutate({ deckName, modelName, tags: currentTags, prompt })}>
                         Suggest cards
                     </Button>
                 </Grid>
@@ -235,7 +206,6 @@ function Home() {
                 )}
             </Grid>
         </Grid>
-
     );
 }
 
