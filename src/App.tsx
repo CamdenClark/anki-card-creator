@@ -12,6 +12,7 @@ interface Note {
     deckName: string;
     fields: object;
     tags: string[];
+    key: string;
 }
 
 interface CardProps {
@@ -20,7 +21,7 @@ interface CardProps {
 
 import useLocalStorage from './useLocalStorage';
 
-const NoteComponent: React.FC<CardProps> = ({ note }) => {
+const NoteComponent: React.FC<CardProps> = ({ note, onTrash, onCreate }) => {
     const [currentNote, setCurrentNote] = useState(note);
     const { modelName, deckName, fields, tags } = currentNote;
 
@@ -40,12 +41,11 @@ const NoteComponent: React.FC<CardProps> = ({ note }) => {
         }));
     };
 
-    const [hidden, setHidden] = useState(false);
 
 
     const { isLoading, mutate } = useMutation({
         mutationFn: addNote,
-        onSuccess: (_) => setHidden(true),
+        onSuccess: (_) => onCreate()
     })
 
     const { data: allTags } = useQuery({
@@ -53,7 +53,7 @@ const NoteComponent: React.FC<CardProps> = ({ note }) => {
         queryKey: ["tags"]
     });
 
-    return !hidden && (
+    return (
         <Grid item xs={12} md={6}>
             <Card>
                 <CardContent>
@@ -72,7 +72,7 @@ const NoteComponent: React.FC<CardProps> = ({ note }) => {
                                 disabled
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12}>
                             <Autocomplete
                                 id="tags"
                                 multiple
@@ -99,7 +99,7 @@ const NoteComponent: React.FC<CardProps> = ({ note }) => {
                     </Grid>
                 </CardContent>
                 <CardActions>
-                    <Button size="small" color="secondary" onClick={() => setHidden(true)}>
+                    <Button size="small" color="secondary" onClick={() => onTrash()}>
                         Trash
                     </Button>
                     <Button size="small" color="primary" onClick={() => mutate(currentNote)}
@@ -124,17 +124,20 @@ function Home() {
     });
 
     const [notes, setNotes] = useState<Note[]>([])
+    const [trashedNotes, setTrashedNotes] = useState<Note[]>([]);
+    const [createdNotes, setCreatedNotes] = useState<Note[]>([]);
+    console.log(trashedNotes)
+    console.log(createdNotes)
 
     const [deckName, setDeckName] = useLocalStorage("deckName", "Default")
     const modelName = "Basic";
-
 
     const [currentTags, setCurrentTags] = useLocalStorage<string[]>("tags", [])
 
     const { openAIKey } = useContext(OpenAIKeyContext);
 
     const { isLoading, mutate } = useMutation({
-        mutationFn: (data) => suggestAnkiNotes(openAIKey, data),
+        mutationFn: (data) => suggestAnkiNotes(openAIKey, data, createdNotes, trashedNotes),
         onSuccess: (newNotes) => {
             setNotes(notes => [...notes, ...newNotes])
         }
@@ -201,8 +204,19 @@ function Home() {
                 {isLoading && <CircularProgress />}
             </Grid>
             <Grid container item spacing={2} alignItems="stretch">
-                {notes.map((note, i) =>
-                    <NoteComponent key={i} note={note} />
+                {notes.map((note) =>
+                    <NoteComponent
+                        key={note.key}
+                        note={note}
+                        onTrash={() => {
+                            setNotes(notes => notes.filter(n => n !== note))
+                            setTrashedNotes(notes => [...notes, note])
+                        }}
+                        onCreate={() => {
+                            setNotes(notes => notes.filter(n => n !== note))
+                            setCreatedNotes(notes => [...notes, note])
+                        }
+                        } />
                 )}
             </Grid>
         </Grid>

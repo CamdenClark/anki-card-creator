@@ -22,6 +22,8 @@ Back: Diocletian`
 export async function suggestAnkiNotes(
     openAIKey: string,
     { deckName, modelName, prompt, tags },
+    createdNotes: Note[],
+    trashedNotes: Note[],
 ): Promise<any> {
     const body = {
         model: 'gpt-4',
@@ -73,6 +75,7 @@ export async function suggestAnkiNotes(
 
     return result.map(fields =>
     ({
+        key: crypto.randomUUID(),
         deckName,
         modelName,
         fields,
