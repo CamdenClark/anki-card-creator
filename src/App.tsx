@@ -126,8 +126,6 @@ function Home() {
     const [notes, setNotes] = useState<Note[]>([])
     const [trashedNotes, setTrashedNotes] = useState<Note[]>([]);
     const [createdNotes, setCreatedNotes] = useState<Note[]>([]);
-    console.log(trashedNotes)
-    console.log(createdNotes)
 
     const [deckName, setDeckName] = useLocalStorage("deckName", "Default")
     const modelName = "Basic";
@@ -137,7 +135,7 @@ function Home() {
     const { openAIKey } = useContext(OpenAIKeyContext);
 
     const { isLoading, mutate } = useMutation({
-        mutationFn: (data) => suggestAnkiNotes(openAIKey, data, createdNotes, trashedNotes),
+        mutationFn: (data) => suggestAnkiNotes(openAIKey, data, notes, createdNotes, trashedNotes),
         onSuccess: (newNotes) => {
             setNotes(notes => [...notes, ...newNotes])
         }

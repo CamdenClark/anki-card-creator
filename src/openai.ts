@@ -1,27 +1,37 @@
-const systemPrompt = (tags) => {
+interface Note {
+    modelName: string;
+    deckName: string;
+    fields: { Front: string, Back: string };
+    tags: string[];
+    key: string;
+}
+
+const systemPrompt = (notes: Note[], trashedNotes: Note[], createdNotes: Note[]) => {
+    let outstandingCards = notes.map(note => `Front: ${note.fields.Front}\nBack: ${note.fields.Back}`).join('\n');
+    let trashedCards = trashedNotes.map(note => `Front: ${note.fields.Front}\nBack: ${note.fields.Back}`).join('\n');
+    let createdCards = createdNotes.map(note => `Front: ${note.fields.Front}\nBack: ${note.fields.Back}`).join('\n');
+
     return `You are an assistant assigned to create Anki cards.
-You should make sure all cards are concise but have
-enough context to understand seen out of context when reviewed
-in the future. You don't need to be chatty, or have proper
-grammar necessarily.
+Make cards concise but contextual. 
 
-Stick to the minimum information principle: The material you learn
-must be formulated in as simple way as it is only possible. 
+${trashedCards.length > 0 && "The user already rejected these cards:" + trashedCards}
 
-Tags associated with these cards are: ${tags.join(', ')}
+${createdCards.length > 0 && "The user created these cards: " + createdCards}
 
-Create cards based on the user's passed in prompt.
+${outstandingCards.length > 0 && "The user hasn't taken an action on these suggested cards: " + outstandingCards}
 
-Cards should be in this format:
+Create cards based on user's prompt.
 
-Front: Which Roman emperor divided the Roman empire into the East and West?
-Back: Diocletian`
-
+Example:
+Front: Which Roman emperor divided the Roman empire?
+Back: Diocletian`;
 };
+
 
 export async function suggestAnkiNotes(
     openAIKey: string,
     { deckName, modelName, prompt, tags },
+    notes: Note[],
     createdNotes: Note[],
     trashedNotes: Note[],
 ): Promise<any> {
@@ -30,7 +40,7 @@ export async function suggestAnkiNotes(
         messages: [
             {
                 role: 'system',
-                content: systemPrompt(tags)
+                content: systemPrompt(notes, createdNotes, trashedNotes)
             },
             {
                 role: 'user',
