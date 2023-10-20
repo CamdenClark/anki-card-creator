@@ -4,6 +4,8 @@ interface Note {
     fields: { Front: string, Back: string };
     tags: string[];
     key: string;
+    trashed?: boolean;
+    created?: boolean;
 }
 
 const systemPrompt = (notes: Note[], trashedNotes: Note[], createdNotes: Note[]) => {
@@ -40,9 +42,9 @@ export async function suggestAnkiNotes(
     openAIKey: string,
     { deckName, modelName, prompt, tags }: Options,
     notes: Note[],
-    createdNotes: Note[],
-    trashedNotes: Note[],
 ): Promise<any> {
+    const createdNotes = notes.filter(n => n.created)
+    const trashedNotes = notes.filter(n => n.trashed)
     const body = {
         model: 'gpt-4',
         messages: [

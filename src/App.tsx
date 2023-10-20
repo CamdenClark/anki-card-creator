@@ -6,6 +6,7 @@ import { useContext, useState } from 'react';
 import { addNote, fetchDecks, fetchTags } from './anki';
 import { suggestAnkiNotes } from './openai';
 import { OpenAIKeyContext } from './OpenAIKeyContext';
+import useLocalStorage from './useLocalStorage';
 
 interface Note {
     modelName: string;
@@ -13,6 +14,8 @@ interface Note {
     fields: { Front: string, Back: string };
     tags: string[];
     key: string;
+    trashed?: boolean;
+    created?: boolean;
 }
 
 interface CardProps {
@@ -22,11 +25,10 @@ interface CardProps {
 
 }
 
-import useLocalStorage from './useLocalStorage';
 
 const NoteComponent: React.FC<CardProps> = ({ note, onTrash, onCreate }) => {
     const [currentNote, setCurrentNote] = useState(note);
-    const { modelName, deckName, fields, tags } = currentNote;
+    const { modelName, deckName, fields, tags, trashed, created } = currentNote;
 
     const handleFieldChange = (event: React.ChangeEvent<{ name: string, value: string }>) => {
         if (event.target.name) {
@@ -44,8 +46,6 @@ const NoteComponent: React.FC<CardProps> = ({ note, onTrash, onCreate }) => {
         }));
     };
 
-
-
     const { isLoading, mutate } = useMutation({
         mutationFn: addNote,
         onSuccess: (_) => onCreate()
@@ -56,7 +56,7 @@ const NoteComponent: React.FC<CardProps> = ({ note, onTrash, onCreate }) => {
         queryKey: ["tags"]
     });
 
-    return (
+    return !trashed && !created && (
         <Grid item xs={12} md={6}>
             <Card>
                 <CardContent>
@@ -141,8 +141,6 @@ function Home() {
     });
 
     const [notes, setNotes] = useState<Note[]>([])
-    const [trashedNotes, setTrashedNotes] = useState<Note[]>([]);
-    const [createdNotes, setCreatedNotes] = useState<Note[]>([]);
 
     const [deckName, setDeckName] = useLocalStorage("deckName", "Default")
     const modelName = "Basic";
@@ -152,7 +150,7 @@ function Home() {
     const { openAIKey } = useContext(OpenAIKeyContext);
 
     const { isLoading, mutate } = useMutation({
-        mutationFn: (data: Options) => suggestAnkiNotes(openAIKey, data, notes, createdNotes, trashedNotes),
+        mutationFn: (data: Options) => suggestAnkiNotes(openAIKey, data, notes),
         onSuccess: (newNotes) => {
             setNotes(notes => [...notes, ...newNotes])
         }
@@ -219,19 +217,22 @@ function Home() {
                 {isLoading && <CircularProgress />}
             </Grid>
             <Grid container item spacing={2} alignItems="stretch">
-                {notes.map((note) =>
+                {notes.map((note, i) =>
                     <NoteComponent
                         key={note.key}
                         note={note}
                         onTrash={() => {
-                            setNotes(notes => notes.filter(n => n !== note))
-                            setTrashedNotes(notes => [...notes, note])
+                            setNotes(notes => {
+                                notes[i].trashed = true;
+                                return notes;
+                            })
                         }}
                         onCreate={() => {
-                            setNotes(notes => notes.filter(n => n !== note))
-                            setCreatedNotes(notes => [...notes, note])
-                        }
-                        } />
+                            setNotes(notes => {
+                                notes[i].created = true;
+                                return notes;
+                            })
+                        }} />
                 )}
             </Grid>
         </Grid>
