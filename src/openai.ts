@@ -23,7 +23,9 @@ const systemPrompt = (notes: Note[]) => {
         .join('\n');
 
     return `You are an assistant assigned to create Anki cards.
-Make cards concise but contextual. 
+Make cards concise but contextual.
+
+Really, the questions and answers shouldn't be more than a sentence each.
 
 ${trashedCards.length > 0 && "The user already rejected these cards:" + trashedCards}
 
@@ -31,7 +33,7 @@ ${createdCards.length > 0 && "The user created these cards: " + createdCards}
 
 ${outstandingCards.length > 0 && "The user hasn't taken an action on these suggested cards: " + outstandingCards}
 
-Create cards based on user's prompt.
+Create 5 cards based on user's prompt.
 
 Example:
 Front: Which Roman emperor divided the Roman empire?

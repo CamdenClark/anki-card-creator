@@ -195,6 +195,7 @@ function Home() {
                         <TextField
                             id="prompt"
                             label="Prompt"
+                            maxRows={10}
                             multiline
                             value={prompt}
                             onChange={e => setPrompt(e.target.value)}
@@ -215,22 +216,20 @@ function Home() {
                 {isLoading && <CircularProgress />}
             </Grid>
             <Grid container item spacing={2} alignItems="stretch">
-                {notes.map((note, i) =>
+                {notes
+                .filter(n => !n.trashed)
+                .filter(n => !n.created)
+                .map((note) =>
                     <NoteComponent
                         key={note.key}
                         note={note}
                         onTrash={() => {
-                            setNotes(notes => {
-                                notes[i].trashed = true;
-                                return notes;
-                            })
+                            setNotes(notes => notes.map((n) => note.key === n.key ? { ...n, trashed: true } : n))
                         }}
                         onCreate={() => {
-                            setNotes(notes => {
-                                notes[i].created = true;
-                                return notes;
-                            })
-                        }} />
+                            setNotes(notes => notes.map((n) => note.key === n.key ? { ...n, created: true } : n))
+                        }}
+                    />
                 )}
             </Grid>
         </Grid>
