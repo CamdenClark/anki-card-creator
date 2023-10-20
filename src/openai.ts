@@ -8,16 +8,16 @@ interface Note {
     created?: boolean;
 }
 
-const systemPrompt = (notes: Note[], trashedNotes: Note[], createdNotes: Note[]) => {
+const systemPrompt = (notes: Note[]) => {
     let outstandingCards = notes
         .filter(n => !n.trashed && !n.created)
         .map(note => `Front: ${note.fields.Front}\nBack: ${note.fields.Back}`)
         .join('\n');
-    let trashedCards = trashedNotes
+    let trashedCards = notes
         .filter(n => n.trashed)
         .map(note => `Front: ${note.fields.Front}\nBack: ${note.fields.Back}`)
         .join('\n');
-    let createdCards = createdNotes
+    let createdCards = notes
         .filter(n => n.created)
         .map(note => `Front: ${note.fields.Front}\nBack: ${note.fields.Back}`)
         .join('\n');
@@ -52,14 +52,12 @@ export async function suggestAnkiNotes(
     { deckName, modelName, prompt, tags }: Options,
     notes: Note[],
 ): Promise<any> {
-    const createdNotes = notes.filter(n => n.created)
-    const trashedNotes = notes.filter(n => n.trashed)
     const body = {
         model: 'gpt-4',
         messages: [
             {
                 role: 'system',
-                content: systemPrompt(notes, createdNotes, trashedNotes)
+                content: systemPrompt(notes)
             },
             {
                 role: 'user',
