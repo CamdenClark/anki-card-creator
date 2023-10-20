@@ -22,9 +22,7 @@ interface CardProps {
     note: Note;
     onTrash: () => void;
     onCreate: () => void;
-
 }
-
 
 const NoteComponent: React.FC<CardProps> = ({ note, onTrash, onCreate }) => {
     const [currentNote, setCurrentNote] = useState(note);

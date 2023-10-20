@@ -9,9 +9,18 @@ interface Note {
 }
 
 const systemPrompt = (notes: Note[], trashedNotes: Note[], createdNotes: Note[]) => {
-    let outstandingCards = notes.map(note => `Front: ${note.fields.Front}\nBack: ${note.fields.Back}`).join('\n');
-    let trashedCards = trashedNotes.map(note => `Front: ${note.fields.Front}\nBack: ${note.fields.Back}`).join('\n');
-    let createdCards = createdNotes.map(note => `Front: ${note.fields.Front}\nBack: ${note.fields.Back}`).join('\n');
+    let outstandingCards = notes
+        .filter(n => !n.trashed && !n.created)
+        .map(note => `Front: ${note.fields.Front}\nBack: ${note.fields.Back}`)
+        .join('\n');
+    let trashedCards = trashedNotes
+        .filter(n => n.trashed)
+        .map(note => `Front: ${note.fields.Front}\nBack: ${note.fields.Back}`)
+        .join('\n');
+    let createdCards = createdNotes
+        .filter(n => n.created)
+        .map(note => `Front: ${note.fields.Front}\nBack: ${note.fields.Back}`)
+        .join('\n');
 
     return `You are an assistant assigned to create Anki cards.
 Make cards concise but contextual. 
@@ -77,15 +86,15 @@ export async function suggestAnkiNotes(
     const noteContent = data.choices[0].message.content;
     let result = [];
 
-
     const regex = /Front:([\s\S]*?)Back:([\s\S]*?)(?=Front|$)/g;
 
     let match;
-
     while ((match = regex.exec(noteContent)) !== null) {
-        result.push({ Front: match[1].trim(), Back: match[2].trim() });
+        result.push({
+            Front: match[1].trim(),
+            Back: match[2].trim()
+        });
     }
-
 
     return result.map(fields =>
     ({
