@@ -3,20 +3,23 @@ import { Autocomplete, Button, Card, CardActions, CardContent, CircularProgress,
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useContext, useState } from 'react';
 
-import { addNote, fetchDecks, fetchTags, fetchModelFieldNames } from './anki';
+import { addNote, fetchDecks, fetchTags } from './anki';
 import { suggestAnkiNotes } from './openai';
 import { OpenAIKeyContext } from './OpenAIKeyContext';
 
 interface Note {
     modelName: string;
     deckName: string;
-    fields: object;
+    fields: { Front: string, Back: string };
     tags: string[];
     key: string;
 }
 
 interface CardProps {
     note: Note;
+    onTrash: () => void;
+    onCreate: () => void;
+
 }
 
 import useLocalStorage from './useLocalStorage';
@@ -25,7 +28,7 @@ const NoteComponent: React.FC<CardProps> = ({ note, onTrash, onCreate }) => {
     const [currentNote, setCurrentNote] = useState(note);
     const { modelName, deckName, fields, tags } = currentNote;
 
-    const handleFieldChange = (event: React.ChangeEvent<{ name?: string, value: unknown }>) => {
+    const handleFieldChange = (event: React.ChangeEvent<{ name: string, value: string }>) => {
         if (event.target.name) {
             setCurrentNote(prev => ({
                 ...prev,
@@ -84,18 +87,26 @@ const NoteComponent: React.FC<CardProps> = ({ note, onTrash, onCreate }) => {
                                 renderInput={(params) => <TextField label="Tags" {...params} />}
                             />
                         </Grid>
-                        {Object.keys(fields).map((fieldKey) => (
-                            <Grid item xs={12} key={fieldKey}>
-                                <TextField
-                                    fullWidth
-                                    label={fieldKey}
-                                    defaultValue={fields[fieldKey]}
-                                    multiline
-                                    onChange={handleFieldChange}
-                                    name={fieldKey}
-                                />
-                            </Grid>
-                        ))}
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                label="Front"
+                                defaultValue={fields.Front}
+                                multiline
+                                onChange={handleFieldChange}
+                                name="Front"
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                label="Back"
+                                defaultValue={fields.Back}
+                                multiline
+                                onChange={handleFieldChange}
+                                name="Back"
+                            />
+                        </Grid>
                     </Grid>
                 </CardContent>
                 <CardActions>
@@ -112,6 +123,12 @@ const NoteComponent: React.FC<CardProps> = ({ note, onTrash, onCreate }) => {
     );
 };
 
+interface Options {
+    deckName: string;
+    modelName: string;
+    prompt: string;
+    tags: string[];
+}
 function Home() {
     const { data: decks } = useQuery({
         queryFn: fetchDecks,
@@ -135,7 +152,7 @@ function Home() {
     const { openAIKey } = useContext(OpenAIKeyContext);
 
     const { isLoading, mutate } = useMutation({
-        mutationFn: (data) => suggestAnkiNotes(openAIKey, data, notes, createdNotes, trashedNotes),
+        mutationFn: (data: Options) => suggestAnkiNotes(openAIKey, data, notes, createdNotes, trashedNotes),
         onSuccess: (newNotes) => {
             setNotes(notes => [...notes, ...newNotes])
         }

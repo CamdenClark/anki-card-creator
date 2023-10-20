@@ -37,6 +37,7 @@ export const addNote = async (note: any): Promise<string[]> => {
         params: { note }
     });
 }
+
 export const fetchModelFieldNames = async (modelName: string): Promise<string[]> => {
     return ankiConnect({
         action: "modelFieldNames",

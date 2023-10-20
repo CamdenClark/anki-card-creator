@@ -28,9 +28,17 @@ Back: Diocletian`;
 };
 
 
+
+interface Options {
+  deckName: string;
+  modelName: string;
+  prompt: string;
+  tags: string[];
+}
+
 export async function suggestAnkiNotes(
     openAIKey: string,
-    { deckName, modelName, prompt, tags },
+    { deckName, modelName, prompt, tags }: Options,
     notes: Note[],
     createdNotes: Note[],
     trashedNotes: Note[],
@@ -66,7 +74,7 @@ export async function suggestAnkiNotes(
 
     const noteContent = data.choices[0].message.content;
     let result = [];
-    let currentObj = {};
+    let currentObj: { Front?: string; Back?: string } = {};
 
     for (const line of noteContent.split('\n')) {
         if (!line.trim()) continue;
@@ -74,7 +82,11 @@ export async function suggestAnkiNotes(
         const [key, value] = line.split(': ');
 
         if (key === 'Front' || key === 'Back') {
-            currentObj[key] = value;
+            if (key === 'Front') { 
+                currentObj.Front = value;
+            } else {
+                currentObj.Back = value;
+            }
             if ('Front' in currentObj && 'Back' in currentObj) {
                 result.push(currentObj);
                 currentObj = {};

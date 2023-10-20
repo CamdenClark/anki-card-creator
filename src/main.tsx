@@ -5,7 +5,7 @@ import { Outlet, RouterProvider, createBrowserRouter, Link } from 'react-router-
 import Settings from './Settings.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-import { AppBar, Toolbar, Typography, Grid, Container } from '@mui/material';
+import { AppBar, Toolbar, Typography, Container } from '@mui/material';
 import OpenAIKeyContextProvider from './OpenAIKeyContext';
 
 function Root() {
