@@ -30,10 +30,10 @@ Back: Diocletian`;
 
 
 interface Options {
-  deckName: string;
-  modelName: string;
-  prompt: string;
-  tags: string[];
+    deckName: string;
+    modelName: string;
+    prompt: string;
+    tags: string[];
 }
 
 export async function suggestAnkiNotes(
@@ -74,24 +74,14 @@ export async function suggestAnkiNotes(
 
     const noteContent = data.choices[0].message.content;
     let result = [];
-    let currentObj: { Front?: string; Back?: string } = {};
 
-    for (const line of noteContent.split('\n')) {
-        if (!line.trim()) continue;
 
-        const [key, value] = line.split(': ');
+    const regex = /Front:([\s\S]*?)Back:([\s\S]*?)(?=Front|$)/g;
 
-        if (key === 'Front' || key === 'Back') {
-            if (key === 'Front') { 
-                currentObj.Front = value;
-            } else {
-                currentObj.Back = value;
-            }
-            if ('Front' in currentObj && 'Back' in currentObj) {
-                result.push(currentObj);
-                currentObj = {};
-            }
-        }
+    let match;
+
+    while ((match = regex.exec(noteContent)) !== null) {
+        result.push({ Front: match[1].trim(), Back: match[2].trim() });
     }
 
 
