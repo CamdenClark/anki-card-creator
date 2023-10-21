@@ -29,20 +29,7 @@ function Home() {
                 2. Have <Link href="https://ankiweb.net/shared/info/2055492159" target="_blank" rel="noopener noreferrer">Anki Connect</Link> plugin installed in your Anki instance
             </Typography>
             <Typography variant="body1" sx={{ marginTop: 2 }}>
-                3. Set up Anki Connect to have CORS enabled for the route. Go to Tools -> Add-ons -> Select AnkiConnect -> Click Config -> Add "anki-card-creator.pages.dev" to your CORS like so:
-                <pre>
-                `{
-                    "apiKey": null,
-                    "apiLogPath": null,
-                    "ignoreOriginList": [],
-                    "webBindAddress": "127.0.0.1",
-                    "webBindPort": 8765,
-                    "webCorsOriginList": [
-                        "localhost:8765",
-                        "anki-card-creator.pages.dev"
-                    ]
-                }`
-                </pre>
+                3. Set up Anki Connect to have CORS enabled for the route. Go to Tools -{'>'} Add-ons -{'>'} Select AnkiConnect -{'>'} Click Config -{'>'} Add "anki-card-creator.pages.dev" to your webCorsOriginList like so:
             </Typography>
             <Typography variant="body1" sx={{ marginTop: 2 }}>
                 4. Create and use an API key
