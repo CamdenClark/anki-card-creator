@@ -31,7 +31,7 @@ function Home() {
             <Typography variant="body1" sx={{ marginTop: 2 }}>
                 3. Set up Anki Connect to have CORS enabled for the route. Go to Tools -> Add-ons -> Select AnkiConnect -> Click Config -> Add "anki-card-creator.pages.dev" to your CORS like so:
                 <pre>
-                {
+                `{
                     "apiKey": null,
                     "apiLogPath": null,
                     "ignoreOriginList": [],
@@ -41,7 +41,7 @@ function Home() {
                         "localhost:8765",
                         "anki-card-creator.pages.dev"
                     ]
-                }
+                }`
                 </pre>
             </Typography>
             <Typography variant="body1" sx={{ marginTop: 2 }}>
