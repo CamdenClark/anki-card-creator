@@ -26,7 +26,7 @@ function Home() {
                 1. Have Anki installed on your local machine (or a remote one I guess)
             </Typography>
             <Typography variant="body1" sx={{ marginTop: 2 }}>
-                2. Have Anki Connect plugin installed in your Anki instance
+                2. Have <Link href="https://ankiweb.net/shared/info/2055492159" target="_blank" rel="noopener noreferrer">Anki Connect</Link> plugin installed in your Anki instance
             </Typography>
             <Typography variant="body1" sx={{ marginTop: 2 }}>
                 3. Set up Anki Connect to have CORS enabled for the route
