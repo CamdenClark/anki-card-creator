@@ -4,9 +4,9 @@ import App from './App.tsx'
 import { Outlet, RouterProvider, createBrowserRouter, Link } from 'react-router-dom'
 import Settings from './Settings.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-
 import { AppBar, Toolbar, Typography, Container } from '@mui/material';
 import OpenAIKeyContextProvider from './OpenAIKeyContext';
+import Home from './Home.tsx';
 
 function Root() {
     return (
@@ -23,8 +23,6 @@ function Root() {
         </OpenAIKeyContextProvider>
     );
 }
-
-import Home from './Home.tsx';
 
 const router = createBrowserRouter([
     {
