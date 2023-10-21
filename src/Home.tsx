@@ -19,6 +19,21 @@ function Home() {
                     </CardContent>
                 </CardActionArea>
             </Card>
+            <Typography variant="body1" sx={{ marginTop: 5 }}>
+                Installation Steps:
+            </Typography>
+            <Typography variant="body1" sx={{ marginTop: 2 }}>
+                1. Have Anki installed on your local machine (or a remote one I guess)
+            </Typography>
+            <Typography variant="body1" sx={{ marginTop: 2 }}>
+                2. Have Anki Connect plugin installed in your Anki instance
+            </Typography>
+            <Typography variant="body1" sx={{ marginTop: 2 }}>
+                3. Set up Anki Connect to have CORS enabled for the route
+            </Typography>
+            <Typography variant="body1" sx={{ marginTop: 2 }}>
+                4. Create and use an API key
+            </Typography>
         </div>
     );
 }
