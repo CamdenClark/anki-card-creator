@@ -24,6 +24,8 @@ function Root() {
     );
 }
 
+import Home from './Home.tsx';
+
 const router = createBrowserRouter([
     {
         path: "/",
@@ -31,7 +33,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "",
-                element: <div />,
+                element: <Home />,
             },
             {
                 path: "settings",
