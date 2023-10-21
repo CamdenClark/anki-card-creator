@@ -217,20 +217,20 @@ function Home() {
             </Grid>
             <Grid container item spacing={2} alignItems="stretch">
                 {notes
-                .filter(n => !n.trashed)
-                .filter(n => !n.created)
-                .map((note) =>
-                    <NoteComponent
-                        key={note.key}
-                        note={note}
-                        onTrash={() => {
-                            setNotes(notes => notes.map((n) => note.key === n.key ? { ...n, trashed: true } : n))
-                        }}
-                        onCreate={() => {
-                            setNotes(notes => notes.map((n) => note.key === n.key ? { ...n, created: true } : n))
-                        }}
-                    />
-                )}
+                    .filter(n => !n.trashed)
+                    .filter(n => !n.created)
+                    .map((note) =>
+                        <NoteComponent
+                            key={note.key}
+                            note={note}
+                            onTrash={() => {
+                                setNotes(notes => notes.map((n) => note.key === n.key ? { ...n, trashed: true } : n))
+                            }}
+                            onCreate={() => {
+                                setNotes(notes => notes.map((n) => note.key === n.key ? { ...n, created: true } : n))
+                            }}
+                        />
+                    )}
             </Grid>
         </Grid>
     );
