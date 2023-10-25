@@ -133,16 +133,13 @@ function Home() {
     const location = useLocation();
     const query = new URLSearchParams(location.search);
 
-    useEffect(() => {
-        console.log(query.get('paramName')); // replace 'paramName' with the actual parameter name
-    }, [location]);
+    const promptParam = query.get('prompt') || "";
 
     const { data: decks, error: ankiError } = useQuery({
         queryFn: fetchDecks,
         queryKey: ["decks"],
         retry: false
     });
-
 
     const { data: tags } = useQuery({
         queryFn: fetchTags,
@@ -151,10 +148,10 @@ function Home() {
 
     const [notes, setNotes] = useState<Note[]>([])
 
-    const [deckName, setDeckName] = useLocalStorage("deckName", "Default")
+    const [deckName, setDeckName] = useLocalStorage("deckName", "Default");
     const modelName = "Basic";
 
-    const [currentTags, setCurrentTags] = useLocalStorage<string[]>("tags", [])
+    const [currentTags, setCurrentTags] = useLocalStorage<string[]>("tags", []);
 
     const { openAIKey } = useContext(OpenAIKeyContext);
 
@@ -163,9 +160,16 @@ function Home() {
         onSuccess: (newNotes) => {
             setNotes(notes => [...notes, ...newNotes])
         }
-    })
+    });
 
-    const [prompt, setPrompt] = useState("")
+    const [prompt, setPrompt] = useState(promptParam);
+
+    // If there's an initial prompt param, kick it off immediately
+    useEffect(() => {
+        if (promptParam !== "") {
+            mutate({ deckName, modelName, tags: currentTags, prompt: promptParam })
+        }
+    }, [promptParam])
 
     return (
         <Grid container sx={{ padding: "25px", maxWidth: 1200 }} spacing={4} justifyContent="flex-start"
@@ -175,7 +179,7 @@ function Home() {
                 <Alert severity="error" sx={{ marginTop: "20px", marginLeft: "25px" }}>Error: We can't connect to Anki using AnkiConnect. Please make sure Anki is running and you have the AnkiConnect plugin enabled, and that you have set the CORS settings.</Alert>
                 : <></>}
             {openAIError ?
-                <Alert severity="error" sx={{ marginTop: "20px", marginLeft: "25px"  }}>Error: We can't connect to OpenAI. Ensure you have entered your OpenAI key correctly.</Alert>
+                <Alert severity="error" sx={{ marginTop: "20px", marginLeft: "25px" }}>Error: We can't connect to OpenAI. Ensure you have entered your OpenAI key correctly.</Alert>
                 : <></>}
             <Grid container item direction="column" spacing={2} justifyContent="flex-start">
                 <Grid item>
