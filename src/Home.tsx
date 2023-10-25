@@ -23,16 +23,16 @@ function Home() {
                 Installation Steps:
             </Typography>
             <Typography variant="body1" sx={{ marginTop: 2 }}>
-                1. Have Anki installed on your local machine (or a remote one I guess)
+                1. Have Anki installed on your local machine
             </Typography>
             <Typography variant="body1" sx={{ marginTop: 2 }}>
-                2. Have <Link href="https://ankiweb.net/shared/info/2055492159" target="_blank" rel="noopener noreferrer">Anki Connect</Link> plugin installed in your Anki instance
+                2. Have the <Link href="https://ankiweb.net/shared/info/2055492159" target="_blank" rel="noopener noreferrer">AnkiConnect</Link> plugin installed in your local Anki
             </Typography>
             <Typography variant="body1" sx={{ marginTop: 2 }}>
-                3. Set up Anki Connect to have CORS enabled for the route. Go to Tools -{'>'} Add-ons -{'>'} Select AnkiConnect -{'>'} Click Config -{'>'} Add "anki-card-creator.pages.dev" to your webCorsOriginList like so:
+                3. Set up Anki Connect to have CORS enabled for the route. Go to Tools -{'>'} Add-ons -{'>'} Select AnkiConnect -{'>'} Click Config -{'>'} Add "anki-card-creator.pages.dev" to your webCorsOriginList
             </Typography>
             <Typography variant="body1" sx={{ marginTop: 2 }}>
-                4. Create and use an API key
+                4. Create and add an OpenAI API key to the Settings page
             </Typography>
         </div>
     );
