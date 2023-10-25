@@ -1,6 +1,15 @@
-import React from 'react';
 import { Card, CardActionArea, CardContent, Typography, Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+
+const Bookmarklet = () => {
+  return (
+    <div>
+      <Typography variant="h6">Bookmarklet</Typography>
+      <Typography>We offer a bookmarklet so you can quickly highlight some text in your browser and go directly to suggesting cards. Drag the following link to your bookmarks:</Typography>
+      <a id="bookmarklet" href="javascript:(function() { var selection = window.getSelection().toString(); var url = 'https://anki-card-creator.pages.dev/suggest?prompt=' + encodeURIComponent(selection); window.open(url, '_blank'); })();">Suggest Anki cards</a>
+    </div>
+  );
+};
 
 function Home() {
     const navigate = useNavigate();
@@ -33,6 +42,10 @@ function Home() {
             </Typography>
             <Typography variant="body1" sx={{ marginTop: 2 }}>
                 4. Create and add an OpenAI API key to the Settings page
+            </Typography>
+
+            <Typography>
+            <Bookmarklet />
             </Typography>
         </div>
     );
