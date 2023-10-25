@@ -1,4 +1,4 @@
-import { Autocomplete, Button, Card, CardActions, CardContent, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Alert, Autocomplete, Button, Card, CardActions, CardContent, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useContext, useState } from 'react';
@@ -127,15 +127,18 @@ interface Options {
     prompt: string;
     tags: string[];
 }
+
 function Home() {
-    const { data: decks } = useQuery({
+    const { data: decks, error: ankiError } = useQuery({
         queryFn: fetchDecks,
-        queryKey: ["decks"]
+        queryKey: ["decks"],
+        retry: false
     });
+
 
     const { data: tags } = useQuery({
         queryFn: fetchTags,
-        queryKey: ["tags"]
+        queryKey: ["tags"],
     });
 
     const [notes, setNotes] = useState<Note[]>([])
@@ -160,6 +163,9 @@ function Home() {
         <Grid container sx={{ padding: "25px", maxWidth: 1200 }} spacing={4} justifyContent="flex-start"
             direction="column"
         >
+            {ankiError ?
+                <Alert severity="error" sx={{ marginTop: "20px" }}>Error: We can't connect to Anki using AnkiConnect. Please make sure Anki is running and you have the AnkiConnect plugin enabled, and that you have set the CORS settings.</Alert>
+                : <></>}
             <Grid container item direction="column" spacing={2} justifyContent="flex-start">
                 <Grid item>
                     <FormControl fullWidth>
