@@ -1,7 +1,8 @@
 import { Alert, Autocomplete, Button, Card, CardActions, CardContent, CircularProgress, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
+import { useLocation } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 
 import { addNote, fetchDecks, fetchTags } from './anki';
 import { suggestAnkiNotes } from './openai';
@@ -129,6 +130,13 @@ interface Options {
 }
 
 function Home() {
+    const location = useLocation();
+    const query = new URLSearchParams(location.search);
+
+    useEffect(() => {
+        console.log(query.get('paramName')); // replace 'paramName' with the actual parameter name
+    }, [location]);
+
     const { data: decks, error: ankiError } = useQuery({
         queryFn: fetchDecks,
         queryKey: ["decks"],
